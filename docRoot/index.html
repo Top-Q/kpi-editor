@@ -2,19 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="description" content="Allows editing the issue type of each test case">
+        <meta name="description" content="View of all the relvant executions">
         <meta name="author" content="Itai Agmon">
-        <title>Test Issue Editor</title>
+        <title>Execution List</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
 	    <link href="css/buttons.dataTables.min.css" rel="stylesheet">
 	    <link href="css/jquery.dataTables.min.css" rel="stylesheet">
-		<link href="css/editor.dataTables.min.css" rel="stylesheet">
-		
     </head>
     <body>
         	<div class="container-fluid">
 		        <div class="col-md-12 main">
-			    <h2 id="title">Tests Table</h2>
+			    <h2 id="title">Execution Table</h2>
 			    <hr>
 			    <table id="table" class="display">
 			    </table>
@@ -24,25 +22,10 @@
 
        	<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 	    <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="js/dataTables.buttons.min.js"></script>
+		<script type="text/javascript" src="js/buttons.html5.min.js"></script>
 	    <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script>
-		function issueChanged(executionId,uid,value) {
-			console.log("execution: " + executionId);
-			console.log("uid: " + uid);
-			console.log("value: " + value);
-			$.ajax({
-				url: '/api/execution/'+executionId+'/test/'+uid +"?issue="+value,
-				type: 'PUT',
-				error: function (xhr) {
-					reject("Failed to get elastic fields");
-				}
-			}).done(function (tests) {                        
-				console.log("Updating was successful")
-			});
-
-
-		}
-		
 		function maketable(json) {
 			var columns = []
 			for (var i = 0; i < json.headers.length; i++) {
@@ -67,38 +50,26 @@
 													// Alows missing values. Important for execution properties in which not all of the execution must have all the properties.
 													targets : "_all",
 													sDefaultContent : ""
-												},
-												{												
-													// The description column will be rendered as link using the value in the link column
-													targets : 6,
-													data : null,
-													className : "unselectable",
-													"render" : function(data, type, row) {
-														return '<select onchange="issueChanged(\''+row.Execution+'\',\''+row.Uid+'\',this.value)"><option>SW</option><option>Auto</option><option>Setup</option></select>';
-													}
-												},
+												}
                                             ]
 							});
 					$('#table tbody').on( 'click', 'tr', function () {
-						if ($(this).hasClass("unselectable")) {
-							return;
-						}
-        				$(this).toggleClass('selected');
+						var execution = table.row(this).data()["Execution"];
+						window.open("/tests.html?id=" + execution,"_self")
     				} );
 
 		     }
 
-
-            function getTests(executionId) {
+			 function getExecutions() {
                 return new Promise(function (fulfill, reject) {
                     $.ajax({
-                        url: '/api/execution/'+executionId+'/test',
+                        url: '/api/execution/',
                         type: 'GET',
                         error: function (xhr) {
                             reject("Failed to get elastic fields");
                         }
-                    }).done(function (tests) {                        
-                        fulfill(tests);
+                    }).done(function (executions) {                        
+                        fulfill(executions);
                     });
 
                 });
@@ -106,10 +77,9 @@
             }
 
             $(document).ready(function() {			
-                getTests(14).then(function(tests){
-                    maketable(tests);
+				getExecutions().then(function(executions){
+                    maketable(executions);
                 });
-			
 		    });
         </script
     </body>
