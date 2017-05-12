@@ -1,4 +1,4 @@
-package il.co.topq.report.front.rest;
+package il.co.topq.kpi.front.rest;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;

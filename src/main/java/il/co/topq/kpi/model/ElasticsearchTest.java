@@ -1,4 +1,4 @@
-package il.co.topq.report.business;
+package il.co.topq.kpi.model;
 
 import java.util.HashMap;
 import java.util.Map;

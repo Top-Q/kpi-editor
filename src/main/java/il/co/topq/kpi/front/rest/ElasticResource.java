@@ -1,4 +1,4 @@
-package il.co.topq.report.front.rest;
+package il.co.topq.kpi.front.rest;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import il.co.topq.report.Configuration;
-import il.co.topq.report.Configuration.ConfigProps;
+import il.co.topq.kpi.Configuration;
+import il.co.topq.kpi.Configuration.ConfigProps;
 
 @RestController
 public class ElasticResource {

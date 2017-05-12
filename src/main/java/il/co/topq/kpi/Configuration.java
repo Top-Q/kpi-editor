@@ -1,4 +1,4 @@
-package il.co.topq.report;
+package il.co.topq.kpi;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package il.co.topq.report.front;
+package il.co.topq.kpi.front;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

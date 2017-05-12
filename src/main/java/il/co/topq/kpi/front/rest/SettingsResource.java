@@ -1,4 +1,4 @@
-package il.co.topq.report.front.rest;
+package il.co.topq.kpi.front.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
-import il.co.topq.report.Configuration;
+import il.co.topq.kpi.Configuration;
 
 @RestController
 @Path("api/settings")

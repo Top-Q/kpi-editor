@@ -1,4 +1,4 @@
-package il.co.topq.report.front.rest;
+package il.co.topq.kpi.front.rest;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,20 +15,21 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import il.co.topq.elastic.ESClient;
-import il.co.topq.report.Common;
-import il.co.topq.report.Configuration;
-import il.co.topq.report.Configuration.ConfigProps;
-import il.co.topq.report.business.ElasticsearchTest;
+import il.co.topq.kpi.model.ElasticDatabase;
+import il.co.topq.kpi.model.ElasticsearchTest;
 
 @RestController
 @Path("api/execution")
 public class ExecutionResource {
 
 	private static final Logger log = LoggerFactory.getLogger(TestResource.class);
-
+	
+	@Autowired
+	private ElasticDatabase db;
+	
 	private enum Header {
 
 		// @formatter:off
@@ -98,21 +99,8 @@ public class ExecutionResource {
 			headers.add(header.headerName);
 		}
 		final DataTable table = new DataTable(headers);
-		List<ElasticsearchTest> tests = null;
-		try (ESClient client = new ESClient(Configuration.INSTANCE.readString(ConfigProps.ELASTIC_HOST),
-				Configuration.INSTANCE.readInt(ConfigProps.ELASTIC_HTTP_PORT))) {
-
-			Map<String, Object> rangeParams = new HashMap<String, Object>();
-			rangeParams.put("gte", "now-30d");
-			// @formatter:off
-			tests = client.index(Common.ELASTIC_INDEX)
-					.document(Common.ELASTIC_DOC)
-					.search()
-					.byRange("executionTimestamp",rangeParams)
-					.asClass(ElasticsearchTest.class);
-			// @formatter:on
-		}
-		if (null == tests || tests.isEmpty()) {
+		List<ElasticsearchTest> tests = db.getTestsByDays(30);
+		if (tests.isEmpty()) {
 			log.warn("No tests were found in the Elastic");
 			return table;
 		}
