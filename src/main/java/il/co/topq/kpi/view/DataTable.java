@@ -1,4 +1,4 @@
-package il.co.topq.kpi.front.rest;
+package il.co.topq.kpi.view;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

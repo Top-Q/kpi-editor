@@ -4,8 +4,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import il.co.topq.kpi.front.rest.DataTable;
-
 public abstract class AbstractTableView<T> {
 	
 	

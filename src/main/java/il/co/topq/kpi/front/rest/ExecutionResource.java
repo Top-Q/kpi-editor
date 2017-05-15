@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import il.co.topq.kpi.StopWatch;
 import il.co.topq.kpi.model.ElasticDatabase;
 import il.co.topq.kpi.model.ElasticsearchTest;
+import il.co.topq.kpi.view.DataTable;
 import il.co.topq.kpi.view.ExecutionTableView;
 
 @RestController

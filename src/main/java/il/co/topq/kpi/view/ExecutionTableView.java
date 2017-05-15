@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import il.co.topq.kpi.front.rest.DataTable;
 import il.co.topq.kpi.model.ElasticsearchTest;
 
 public class ExecutionTableView extends AbstractTableView<ElasticsearchTest> {
