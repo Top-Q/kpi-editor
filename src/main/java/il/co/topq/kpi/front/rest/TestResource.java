@@ -1,15 +1,9 @@
 
-
-
 package il.co.topq.kpi.front.rest;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
@@ -27,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import il.co.topq.kpi.model.ElasticDatabase;
 import il.co.topq.kpi.model.ElasticsearchTest;
+import il.co.topq.kpi.view.TestTableView;
 
 @RestController
 @Path("api/execution/{executionId}/test")
@@ -39,39 +34,15 @@ public class TestResource {
 	@Autowired
 	private ElasticDatabase db;
 
-	private enum Header {
-
-		// @formatter:off
-		EXECUTION("Execution"),
-		UID("Uid"),
-		NAME("Name"),
-		DESCRIPTION("Description"),
-		STATUS("Status"),
-		FAILURE_REASON("Failure Reason"),
-		ISSUE_TYPE("Issue Type");
-		// @formatter:on
-
-		public final String headerName;
-
-		private Header(String headerName) {
-			this.headerName = headerName;
-		}
-
-	}
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public DataTable get(@PathParam("executionId") int executionId) throws IOException {
 		log.debug("GET - Get list of all the tests in the current execution");
 		List<ElasticsearchTest> tests = db.getTestsByExecution(executionId);
-		Set<String> headers = new LinkedHashSet<String>();
-		for (Header header : Header.values()) {
-			headers.add(header.headerName);
-		}
-		final DataTable table = new DataTable(headers);
+		final TestTableView view = new TestTableView();
 		if (tests.isEmpty()) {
 			log.warn("No tests were found in execution with id " + executionId);
-			return table;
+			return view.getTable();
 		}
 		// @formatter:off
 		tests = tests
@@ -80,22 +51,7 @@ public class TestResource {
 				.sorted((test0, test1) -> compareUid(test0, test1))
 				.collect(Collectors.toList());
 		// @formatter:off
-
-		for (ElasticsearchTest test : tests) {
-				Map<String, Object> row = new HashMap<String, Object>();
-				row.put(Header.EXECUTION.headerName, test.getExecutionId());
-				row.put(Header.UID.headerName, test.getUid());
-				row.put(Header.NAME.headerName, test.getName());
-				row.put(Header.DESCRIPTION.headerName, test.getDescription());
-				row.put(Header.STATUS.headerName, test.getStatus());
-				row.put(Header.FAILURE_REASON.headerName, test.getProperties().get("failureReason") == null ? ""
-						: test.getProperties().get("failureReason"));
-				row.put(Header.ISSUE_TYPE.headerName,
-						test.getProperties().get("issueType") == null ? "" : test.getProperties().get("issueType"));
-				table.addRow(row);
-
-		}
-		return table;
+		return view.populate(tests).getTable();
 	}
 
 

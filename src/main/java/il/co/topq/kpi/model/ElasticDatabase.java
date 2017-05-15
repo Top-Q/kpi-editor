@@ -17,6 +17,7 @@ import il.co.topq.elastic.endpoint.Document;
 import il.co.topq.kpi.Common;
 import il.co.topq.kpi.Configuration;
 import il.co.topq.kpi.Configuration.ConfigProps;
+import il.co.topq.kpi.StopWatch;
 
 @Component
 public class ElasticDatabase {
@@ -25,18 +26,21 @@ public class ElasticDatabase {
 
 	public List<ElasticsearchTest> getTestsByDays(int days) throws JsonProcessingException, IOException {
 		List<ElasticsearchTest> tests = new ArrayList<>();
+		StopWatch stopWatch = new StopWatch(log).start("Crating instance of ESClient");
 		try (ESClient client = new ESClient(Configuration.INSTANCE.readString(ConfigProps.ELASTIC_HOST),
 				Configuration.INSTANCE.readInt(ConfigProps.ELASTIC_HTTP_PORT))) {
-
+			stopWatch.stopAndLog();
 			Map<String, Object> rangeParams = new HashMap<String, Object>();
 			rangeParams.put("gte", "now-" + days + "d");
 			// @formatter:off
+			stopWatch.start("Executing query for all tests withing the given time frame");
 			tests = client.index(Common.ELASTIC_INDEX)
 					.document(Common.ELASTIC_DOC)
 					.search()
 					.byRange("executionTimestamp",rangeParams)
 					.asClass(ElasticsearchTest.class);
 			// @formatter:on
+			stopWatch.stopAndLog();
 		} catch (Exception e) {
 			log.error("Failed to find tests");
 			throw e;
