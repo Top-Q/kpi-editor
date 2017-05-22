@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import il.co.topq.kpi.StopWatch;
 import il.co.topq.kpi.model.ElasticDatabase;
 import il.co.topq.kpi.model.ElasticsearchTest;
+import il.co.topq.kpi.view.AbstractTableView;
 import il.co.topq.kpi.view.DataTable;
 import il.co.topq.kpi.view.ExecutionTableView;
 
@@ -33,7 +34,7 @@ public class ExecutionResource {
 	@GET
 	public DataTable get() throws IOException {
 		log.debug("GET - Get all the executions within the given time frame");
-		ExecutionTableView tableView = new ExecutionTableView();
+		AbstractTableView<ElasticsearchTest> tableView = new ExecutionTableView();
 		StopWatch stopWatch = new StopWatch(log).start("Getting from Elastic all tests within the given time frame");
 		List<ElasticsearchTest> tests = db.getTestsByDays(30);
 		stopWatch.stopAndLog();

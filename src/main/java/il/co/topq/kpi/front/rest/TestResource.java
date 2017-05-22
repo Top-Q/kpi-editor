@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import il.co.topq.kpi.model.ElasticDatabase;
 import il.co.topq.kpi.model.ElasticsearchTest;
+import il.co.topq.kpi.view.AbstractTableView;
 import il.co.topq.kpi.view.DataTable;
 import il.co.topq.kpi.view.TestTableView;
 
@@ -40,7 +41,7 @@ public class TestResource {
 	public DataTable get(@PathParam("executionId") int executionId) throws IOException {
 		log.debug("GET - Get list of all the tests in the current execution");
 		List<ElasticsearchTest> tests = db.getTestsByExecution(executionId);
-		final TestTableView view = new TestTableView();
+		final AbstractTableView<ElasticsearchTest> view = new TestTableView();
 		if (tests.isEmpty()) {
 			log.warn("No tests were found in execution with id " + executionId);
 			return view.getTable();
