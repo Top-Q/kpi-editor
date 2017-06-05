@@ -16,13 +16,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import il.co.topq.elastic.ESClient;
+import il.co.topq.kpi.client.Client;
 import il.co.topq.kpi.model.ElasticsearchTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({ "server.port=8080" })
-public abstract class AbstractResourceTestCase {
+public abstract class AbstractTestCase {
 
 	protected static final String INDEX = "testing";
 

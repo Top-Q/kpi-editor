@@ -1,13 +1,14 @@
-package il.co.topq.kpi;
+package il.co.topq.kpi.view;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import il.co.topq.kpi.AbstractTestCase;
 import il.co.topq.kpi.view.DataTable;
 import il.co.topq.kpi.view.NumberOfIssuesByTypeTableView;
 
-public class TestAggregationByIssuesCount extends AbstractResourceTestCase {
+public class TestAggregationByIssuesCount extends AbstractTestCase {
 
 	@Test
 	public void testIssuesCountPerTestTypeInSingleBranch() throws Exception {

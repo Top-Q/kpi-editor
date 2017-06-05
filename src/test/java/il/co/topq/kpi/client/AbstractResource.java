@@ -1,4 +1,4 @@
-package il.co.topq.kpi;
+package il.co.topq.kpi.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

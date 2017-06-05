@@ -1,4 +1,4 @@
-package il.co.topq.kpi;
+package il.co.topq.kpi.client;
 
 import okhttp3.OkHttpClient;
 
