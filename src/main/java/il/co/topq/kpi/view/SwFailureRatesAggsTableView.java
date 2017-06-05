@@ -9,7 +9,7 @@ import il.co.topq.kpi.model.ElasticsearchTest;
 
 public class SwFailureRatesAggsTableView extends AbstractTableView<ElasticsearchTest> {
 
-	private enum Header implements TableHeader {
+	public enum Header implements TableHeader {
 
 		// @formatter:off
 		BRANCH("Branch"),

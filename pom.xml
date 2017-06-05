@@ -55,6 +55,12 @@
 			<artifactId>elasticseach-client</artifactId>
 			<version>1.0.02-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.8.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

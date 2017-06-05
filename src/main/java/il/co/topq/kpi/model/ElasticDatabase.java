@@ -42,7 +42,7 @@ public class ElasticDatabase {
 			// @formatter:on
 			stopWatch.stopAndLog();
 		} catch (Exception e) {
-			log.error("Failed to find tests");
+			log.error("Failed to find tests due to " + e.getMessage());
 			throw e;
 		}
 		return tests;
