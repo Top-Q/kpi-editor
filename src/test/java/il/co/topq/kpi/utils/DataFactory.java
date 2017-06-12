@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import il.co.topq.elastic.ESClient;
+import il.co.topq.kpi.Common;
 import il.co.topq.kpi.model.ElasticsearchTest;
 
 /**
@@ -30,8 +31,22 @@ public class DataFactory {
 
 	private ESClient client;
 
-	public DataFactory() {
+	public DataFactory() throws IOException {
 		client = new ESClient("localhost", 9200);
+		createIndexIfNoneExists();
+	}
+
+	private void createIndexIfNoneExists() throws IOException {
+		try {
+			if (client.index(INDEX).isExists()) {
+				return;
+			}
+			client.index(Common.ELASTIC_INDEX).create(ResourceUtils.resourceToString("mapping.json"));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	public void createData() throws IOException {

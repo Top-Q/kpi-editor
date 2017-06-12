@@ -18,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import il.co.topq.elastic.ESClient;
 import il.co.topq.kpi.client.Client;
 import il.co.topq.kpi.model.ElasticsearchTest;
+import il.co.topq.kpi.utils.ResourceUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -28,16 +29,15 @@ public abstract class AbstractTestCase {
 	protected static final String INDEX = "testing";
 
 	protected static final String DOCUMENT = Common.ELASTIC_DOC;
-	
+
 	protected static final String SW_ISSUE = "SW";
-	
+
 	protected static final String SETUP_ISSUE = "Setup";
-	
+
 	protected static final String AUTO_ISSUE = "Auto";
-	
+
 	protected static final SimpleDateFormat ELASTIC_SEARCH_TIMESTAMP_STRING_FORMATTER = new SimpleDateFormat(
 			"yyyy/MM/dd HH:mm:ss");
-
 
 	@Value("${local.server.port}")
 	private int port = 8080;
@@ -48,7 +48,7 @@ public abstract class AbstractTestCase {
 	protected ESClient esClient;
 
 	protected Client client;
-	
+
 	protected int executionId = 9000;
 
 	@Before
@@ -56,11 +56,23 @@ public abstract class AbstractTestCase {
 		Common.ELASTIC_INDEX = INDEX;
 		esClient = new ESClient("localhost", elasticPort);
 		client = new Client("http://localhost:" + port);
-		if (esClient.index(INDEX).isExists()){
+		recreateIndex();
+	}
+
+	private void recreateIndex() throws IOException {
+		if (esClient.index(INDEX).isExists()) {
 			esClient.index(INDEX).delete();
 		}
+
+		try {
+			esClient.index(Common.ELASTIC_INDEX).create(ResourceUtils.resourceToString("mapping.json"));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
-	
+
 	protected void addTests(int numOfTests, String type, String branch, String status, String issueType)
 			throws IOException {
 		String executionTimeStamp = ELASTIC_SEARCH_TIMESTAMP_STRING_FORMATTER.format(new Date());
@@ -91,7 +103,6 @@ public abstract class AbstractTestCase {
 
 		}
 	}
-
 
 	@After
 	public void teardown() throws IOException {
