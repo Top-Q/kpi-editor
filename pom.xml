@@ -96,10 +96,10 @@
 						<goals>
 							<goal>single</goal>
 						</goals>
-						<id>create-report-server</id>
+						<id>create-kpi-editor-server</id>
 						<phase>package</phase>
 						<configuration>
-							<finalName>difido-server</finalName>
+							<finalName>kpi-editor</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
 								<descriptor>src/main/assembly/report.xml</descriptor>

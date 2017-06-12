@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 import il.co.topq.elastic.ESClient;
 import il.co.topq.kpi.Common;
@@ -52,35 +51,30 @@ public class DataFactory implements Closeable {
 	}
 
 	public void createData() throws IOException {
-		addTests(10, "", "12.12.122", "failure", "SW");
-		addTests(20, "", "12.12.122", "failure", "Auto");
-		addTests(30, "", "12.12.122", "failure", "Setup");
-		addTests(30, "", "12.12.122", "success", "");
-
-		// addTests(10, "regression", "12.12.122", "failure", "SW");
-		// addTests(20, "regression", "12.12.122", "failure", "Auto");
-		// addTests(30, "regression", "12.12.122", "failure", "Setup");
-		// addTests(30, "regression", "12.12.122", "success", "");
-		// addTests(10, "regression", "13.12.122", "failure", "SW");
-		// addTests(20, "regression", "13.12.122", "failure", "Auto");
-		// addTests(30, "regression", "13.12.122", "failure", "Setup");
-		// addTests(30, "regression", "13.12.122", "success", "");
-		// addTests(10, "progression", "12.12.122", "failure", "SW");
-		// addTests(20, "progression", "12.12.122", "failure", "Auto");
-		// addTests(30, "progression", "12.12.122", "failure", "Setup");
-		// addTests(30, "progression", "12.12.122", "success", "");
-		// addTests(10, "progression", "13.12.122", "failure", "SW");
-		// addTests(20, "progression", "13.12.122", "failure", "Auto");
-		// addTests(30, "progression", "13.12.122", "failure", "Setup");
-		// addTests(30, "progression", "13.12.122", "success", "");
-		// addTests(10, "sanity", "12.12.122", "failure", "SW");
-		// addTests(20, "sanity", "12.12.122", "failure", "Auto");
-		// addTests(30, "sanity", "12.12.122", "failure", "Setup");
-		// addTests(30, "sanity", "12.12.122", "success", "");
-		// addTests(10, "sanity", "13.12.122", "failure", "SW");
-		// addTests(20, "sanity", "13.12.122", "failure", "Auto");
-		// addTests(30, "sanity", "13.12.122", "failure", "Setup");
-		// addTests(30, "sanity", "13.12.122", "success", "");
+		 addTests(10, "regression", "12.12.122", "failure", "SW");
+		 addTests(20, "regression", "12.12.122", "failure", "Auto");
+		 addTests(30, "regression", "12.12.122", "failure", "Setup");
+		 addTests(30, "regression", "12.12.122", "success", "");
+		 addTests(10, "regression", "13.12.122", "failure", "SW");
+		 addTests(20, "regression", "13.12.122", "failure", "Auto");
+		 addTests(30, "regression", "13.12.122", "failure", "Setup");
+		 addTests(30, "regression", "13.12.122", "success", "");
+		 addTests(10, "progression", "12.12.122", "failure", "SW");
+		 addTests(20, "progression", "12.12.122", "failure", "Auto");
+		 addTests(30, "progression", "12.12.122", "failure", "Setup");
+		 addTests(30, "progression", "12.12.122", "success", "");
+		 addTests(10, "progression", "13.12.122", "failure", "SW");
+		 addTests(20, "progression", "13.12.122", "failure", "Auto");
+		 addTests(30, "progression", "13.12.122", "failure", "Setup");
+		 addTests(30, "progression", "13.12.122", "success", "");
+		 addTests(10, "sanity", "12.12.122", "failure", "SW");
+		 addTests(20, "sanity", "12.12.122", "failure", "Auto");
+		 addTests(30, "sanity", "12.12.122", "failure", "Setup");
+		 addTests(30, "sanity", "12.12.122", "success", "");
+		 addTests(10, "sanity", "13.12.122", "failure", "SW");
+		 addTests(20, "sanity", "13.12.122", "failure", "Auto");
+		 addTests(30, "sanity", "13.12.122", "failure", "Setup");
+		 addTests(30, "sanity", "13.12.122", "success", "");
 
 	}
 
@@ -102,7 +96,7 @@ public class DataFactory implements Closeable {
 			test.setExecutionTimeStamp(executionTimeStamp);
 
 			Map<String, String> scenarioProp = new HashMap<String, String>();
-			// scenarioProp.put("Type", type);
+			scenarioProp.put("Type", type);
 			scenarioProp.put("Branch", branch);
 			test.setScenarioProperties(scenarioProp);
 

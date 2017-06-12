@@ -20,9 +20,6 @@
 		<fileSet>
 			<outputDirectory>docRoot</outputDirectory>
 			<directory>docRoot</directory>
-			<excludes>
-				<exclude>reports/</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<outputDirectory>bin</outputDirectory>
