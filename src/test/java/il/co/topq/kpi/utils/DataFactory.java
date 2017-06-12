@@ -1,10 +1,12 @@
 package il.co.topq.kpi.utils;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import il.co.topq.elastic.ESClient;
 import il.co.topq.kpi.Common;
@@ -18,7 +20,7 @@ import il.co.topq.kpi.model.ElasticsearchTest;
  * @author itai
  *
  */
-public class DataFactory {
+public class DataFactory implements Closeable {
 
 	protected static final SimpleDateFormat ELASTIC_SEARCH_TIMESTAMP_STRING_FORMATTER = new SimpleDateFormat(
 			"yyyy/MM/dd HH:mm:ss");
@@ -39,7 +41,7 @@ public class DataFactory {
 	private void createIndexIfNoneExists() throws IOException {
 		try {
 			if (client.index(INDEX).isExists()) {
-				return;
+				client.index(INDEX).delete();
 			}
 			client.index(Common.ELASTIC_INDEX).create(ResourceUtils.resourceToString("mapping.json"));
 
@@ -50,30 +52,35 @@ public class DataFactory {
 	}
 
 	public void createData() throws IOException {
-		addTests(10, "regression", "12.12.122", "failure", "SW");
-		addTests(20, "regression", "12.12.122", "failure", "Auto");
-		addTests(30, "regression", "12.12.122", "failure", "Setup");
-		addTests(30, "regression", "12.12.122", "success", "");
-		addTests(10, "regression", "13.12.122", "failure", "SW");
-		addTests(20, "regression", "13.12.122", "failure", "Auto");
-		addTests(30, "regression", "13.12.122", "failure", "Setup");
-		addTests(30, "regression", "13.12.122", "success", "");
-		addTests(10, "progression", "12.12.122", "failure", "SW");
-		addTests(20, "progression", "12.12.122", "failure", "Auto");
-		addTests(30, "progression", "12.12.122", "failure", "Setup");
-		addTests(30, "progression", "12.12.122", "success", "");
-		addTests(10, "progression", "13.12.122", "failure", "SW");
-		addTests(20, "progression", "13.12.122", "failure", "Auto");
-		addTests(30, "progression", "13.12.122", "failure", "Setup");
-		addTests(30, "progression", "13.12.122", "success", "");
-		addTests(10, "sanity", "12.12.122", "failure", "SW");
-		addTests(20, "sanity", "12.12.122", "failure", "Auto");
-		addTests(30, "sanity", "12.12.122", "failure", "Setup");
-		addTests(30, "sanity", "12.12.122", "success", "");
-		addTests(10, "sanity", "13.12.122", "failure", "SW");
-		addTests(20, "sanity", "13.12.122", "failure", "Auto");
-		addTests(30, "sanity", "13.12.122", "failure", "Setup");
-		addTests(30, "sanity", "13.12.122", "success", "");
+		addTests(10, "", "12.12.122", "failure", "SW");
+		addTests(20, "", "12.12.122", "failure", "Auto");
+		addTests(30, "", "12.12.122", "failure", "Setup");
+		addTests(30, "", "12.12.122", "success", "");
+
+		// addTests(10, "regression", "12.12.122", "failure", "SW");
+		// addTests(20, "regression", "12.12.122", "failure", "Auto");
+		// addTests(30, "regression", "12.12.122", "failure", "Setup");
+		// addTests(30, "regression", "12.12.122", "success", "");
+		// addTests(10, "regression", "13.12.122", "failure", "SW");
+		// addTests(20, "regression", "13.12.122", "failure", "Auto");
+		// addTests(30, "regression", "13.12.122", "failure", "Setup");
+		// addTests(30, "regression", "13.12.122", "success", "");
+		// addTests(10, "progression", "12.12.122", "failure", "SW");
+		// addTests(20, "progression", "12.12.122", "failure", "Auto");
+		// addTests(30, "progression", "12.12.122", "failure", "Setup");
+		// addTests(30, "progression", "12.12.122", "success", "");
+		// addTests(10, "progression", "13.12.122", "failure", "SW");
+		// addTests(20, "progression", "13.12.122", "failure", "Auto");
+		// addTests(30, "progression", "13.12.122", "failure", "Setup");
+		// addTests(30, "progression", "13.12.122", "success", "");
+		// addTests(10, "sanity", "12.12.122", "failure", "SW");
+		// addTests(20, "sanity", "12.12.122", "failure", "Auto");
+		// addTests(30, "sanity", "12.12.122", "failure", "Setup");
+		// addTests(30, "sanity", "12.12.122", "success", "");
+		// addTests(10, "sanity", "13.12.122", "failure", "SW");
+		// addTests(20, "sanity", "13.12.122", "failure", "Auto");
+		// addTests(30, "sanity", "13.12.122", "failure", "Setup");
+		// addTests(30, "sanity", "13.12.122", "success", "");
 
 	}
 
@@ -95,7 +102,7 @@ public class DataFactory {
 			test.setExecutionTimeStamp(executionTimeStamp);
 
 			Map<String, String> scenarioProp = new HashMap<String, String>();
-			scenarioProp.put("Type", type);
+			// scenarioProp.put("Type", type);
 			scenarioProp.put("Branch", branch);
 			test.setScenarioProperties(scenarioProp);
 
@@ -108,9 +115,19 @@ public class DataFactory {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		DataFactory factory = new DataFactory();
-		factory.createData();
+	@Override
+	public void close() throws IOException {
+		if (client != null) {
+			client.close();
+			
+		}
 	}
+
+	public static void main(String[] args) throws IOException {
+		try (DataFactory factory = new DataFactory()){
+			factory.createData();
+		}
+	}
+
 
 }
